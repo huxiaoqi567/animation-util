@@ -1,0 +1,32 @@
+{
+  "name": "animation-util",
+  "version": "0.0.1",
+  "description": "util for animation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/huxiaoqi567/animation-util.git"
+  },
+  "keywords": [
+    "animation",
+    "util",
+    "timer",
+    "easing",
+    "bezier"
+  ],
+  "author": "xiaoqi.huxq",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/huxiaoqi567/animation-util/issues"
+  },
+  "homepage": "https://github.com/huxiaoqi567/animation-util#readme",
+  "dependencies": {
+    "object-assign": "^4.1.1"
+  },
+  "devDependencies": {
+    "webpack": "^3.8.1"
+  }
+}
