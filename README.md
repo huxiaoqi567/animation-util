@@ -10,7 +10,7 @@ $ npm install animation-util --save
 ## 引用
 
 ```jsx
-import Binding from 'animation-util';
+import Timer from 'animation-util';
 ```
 
 
