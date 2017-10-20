@@ -6,9 +6,10 @@ import bezier from './bezier';
 import {raf, cancelRAF} from './raf';
 import assign from 'object-assign';
 
+const MIN_DURATION = 1;
+
 export default class Timer extends EventEmitter {
 
-  static MIN_DURATION = 1;
 
   cfg = null;
 
@@ -22,7 +23,7 @@ export default class Timer extends EventEmitter {
 
   run() {
     let duration = this.cfg.duration;
-    if (duration <= Animation.MIN_DURATION) {
+    if (duration <= MIN_DURATION) {
       this.isfinished = true;
       this.emit('run', {
         percent: 1
