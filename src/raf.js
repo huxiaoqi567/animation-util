@@ -9,14 +9,13 @@ const raf = window.requestAnimationFrame ||
     window.setTimeout(callback, 1000 / 60);
   };
 
-const vendors = ['webkit', 'moz', 'ms', 'o'];
-let cancelRAF = window.cancelAnimationFrame;
-for (let i = 0; i < vendors.length; i++) {
-  if (window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame']) {
-    cancelRAF = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
-  }
-}
-cancelRAF = cancelRAF || window.clearTimeout;
+const cancelRAF = window.cancelAnimationFrame ||
+  window.webkitCancelAnimationFrame ||
+  window.mozCancelAnimationFrame ||
+  window.oCancelAnimationFrame ||
+  window.msCancelAnimationFrame ||
+  window.clearTimeout;
+
 
 export {
   raf,
