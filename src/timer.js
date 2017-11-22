@@ -34,11 +34,11 @@ Timer.prototype = {
     }, cfg);
   },
   run: function() {
-    let {duration, onStart, onRun, onEnd} = this.cfg;
+    let {duration, onStart, onRun} = this.cfg;
     if (duration <= MIN_DURATION) {
       this.isfinished = true;
       typeof onRun === 'function' ? onRun({percent: 1}) : null;
-      typeof onEnd === 'function' ? onEnd({percent: 1}) : null;
+      this.stop();
     }
     if (this.isfinished) return;
     this._hasFinishedPercent = this._stop && this._stop.percent || 0;
@@ -54,7 +54,7 @@ Timer.prototype = {
   },
 
   _run: function() {
-    let {onRun, onEnd, onStop} = this.cfg;
+    let {onRun, onStop} = this.cfg;
     cancelRAF(this._raf);
     this._raf = raf(() => {
       this.now = Date.now();
@@ -81,11 +81,7 @@ Timer.prototype = {
 
         if (this.percent >= 1) {
           this.isfinished = true;
-          typeof onEnd === 'function' ? onEnd({
-            percent: 1,
-            t: this.t,
-            type: TYPES.END
-          }) : null;
+          this.stop();
         }
         return;
       }
@@ -102,10 +98,16 @@ Timer.prototype = {
   },
 
   stop: function() {
+    let {onEnd} = this.cfg;
     this._stop = {
       percent: this.percent,
       now: this.now
     };
+    typeof onEnd === 'function' ? onEnd({
+      percent: 1,
+      t: this.t,
+      type: TYPES.END
+    }) : null;
     cancelRAF(this._raf);
   }
 };

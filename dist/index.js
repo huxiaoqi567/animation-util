@@ -70,7 +70,25 @@
 "use strict";
 
 
-module.exports = __webpack_require__(1);
+var Timer = __webpack_require__(1);
+
+var block = document.querySelector('#block');
+
+var timer = new Timer({
+  duration: 500,
+  easing: 'easeOutSine',
+  onStart: function onStart(e) {
+    console.log(e);
+  },
+  onRun: function onRun(e) {
+    block.style.webkitTransform = 'translateX(' + e.percent * 200 + 'px)';
+  },
+  onEnd: function onEnd(e) {
+    console.log(e);
+  }
+});
+
+timer.run();
 
 /***/ }),
 /* 1 */
@@ -79,450 +97,140 @@ module.exports = __webpack_require__(1);
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _events = __webpack_require__(2);
-
-var _events2 = _interopRequireDefault(_events);
-
-var _easing = __webpack_require__(3);
-
-var _easing2 = _interopRequireDefault(_easing);
-
-var _bezier = __webpack_require__(4);
-
-var _bezier2 = _interopRequireDefault(_bezier);
-
-var _raf = __webpack_require__(5);
-
-var _objectAssign = __webpack_require__(6);
-
-var _objectAssign2 = _interopRequireDefault(_objectAssign);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var MIN_DURATION = 1;
-
-var Timer = function (_EventEmitter) {
-  _inherits(Timer, _EventEmitter);
-
-  function Timer(cfg) {
-    _classCallCheck(this, Timer);
-
-    var _this = _possibleConstructorReturn(this, (Timer.__proto__ || Object.getPrototypeOf(Timer)).call(this, cfg));
-
-    _this.cfg = null;
-
-    _this.cfg = (0, _objectAssign2.default)({
-      easing: 'linear',
-      duration: Infinity
-    }, cfg);
-    return _this;
-  }
-
-  _createClass(Timer, [{
-    key: 'run',
-    value: function run() {
-      var duration = this.cfg.duration;
-      if (duration <= MIN_DURATION) {
-        this.isfinished = true;
-        this.emit('run', {
-          percent: 1
-        });
-        this.emit('end', {
-          percent: 1
-        });
-      }
-      if (this.isfinished) return;
-      this._hasFinishedPercent = this._stop && this._stop.percent || 0;
-      this._stop = null;
-      this.start = Date.now();
-      this.percent = 0;
-      this.emit('start', {
-        percent: 0
-      });
-      // epsilon determines the precision of the solved values
-      var epsilon = 1000 / 60 / duration / 4;
-      var b = this.cfg.bezierArgs;
-      this.easingFn = b && b.length === 4 ? (0, _bezier2.default)(b[0], b[1], b[2], b[3], epsilon) : _easing2.default[this.cfg.easing];
-      this._run();
-    }
-  }, {
-    key: '_run',
-    value: function _run() {
-      var _this2 = this;
-
-      (0, _raf.cancelRAF)(this._raf);
-      this._raf = (0, _raf.raf)(function () {
-        _this2.now = Date.now();
-        _this2.t = _this2.now - _this2.start;
-        _this2.duration = _this2.now - _this2.start >= _this2.cfg.duration ? _this2.cfg.duration : _this2.now - _this2.start;
-        _this2.progress = _this2.easingFn(_this2.duration / _this2.cfg.duration);
-        _this2.percent = _this2.duration / _this2.cfg.duration + _this2._hasFinishedPercent;
-        if (_this2.percent >= 1 || _this2._stop) {
-          _this2.percent = _this2._stop && _this2._stop.percent ? _this2._stop.percent : 1;
-          _this2.duration = _this2._stop && _this2._stop.duration ? _this2._stop.duration : _this2.duration;
-          var param = {
-            percent: _this2.percent,
-            t: _this2.t
-          };
-          _this2.emit('run', {
-            percent: _this2.progress,
-            originPercent: _this2.percent,
-            t: _this2.t
-          });
-          _this2.emit('stop', param);
-          if (_this2.percent >= 1) {
-            _this2.isfinished = true;
-            _this2.emit('end', {
-              percent: 1,
-              t: _this2.t
-            });
-          }
-          return;
-        }
-        _this2.emit('run', {
-          percent: _this2.progress,
-          originPercent: _this2.percent,
-          t: _this2.t
-        });
-        _this2._run();
-      });
-    }
-  }, {
-    key: 'stop',
-    value: function stop() {
-      this._stop = {
-        percent: this.percent,
-        now: this.now
-      };
-      (0, _raf.cancelRAF)(this._raf);
-    }
-  }]);
-
-  return Timer;
-}(_events2.default);
-
-exports.default = Timer;
-;
+module.exports = __webpack_require__(2);
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
+"use strict";
 
-function EventEmitter() {
-  this._events = this._events || {};
-  this._maxListeners = this._maxListeners || undefined;
-}
-module.exports = EventEmitter;
 
-// Backwards-compat with node 0.10.x
-EventEmitter.EventEmitter = EventEmitter;
+var easing = __webpack_require__(3);
+var bezier = __webpack_require__(4);
 
-EventEmitter.prototype._events = undefined;
-EventEmitter.prototype._maxListeners = undefined;
+var _require = __webpack_require__(5),
+    raf = _require.raf,
+    cancelRAF = _require.cancelRAF;
 
-// By default EventEmitters will print a warning if more than 10 listeners are
-// added to it. This is a useful default which helps finding memory leaks.
-EventEmitter.defaultMaxListeners = 10;
+var assign = __webpack_require__(6);
 
-// Obviously not all Emitters should be limited to 10. This function allows
-// that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function(n) {
-  if (!isNumber(n) || n < 0 || isNaN(n))
-    throw TypeError('n must be a positive number');
-  this._maxListeners = n;
-  return this;
+var TYPES = {
+  START: 'start',
+  END: 'end',
+  RUN: 'run',
+  STOP: 'stop'
 };
 
-EventEmitter.prototype.emit = function(type) {
-  var er, handler, len, args, i, listeners;
+var noop = function noop() {};
 
-  if (!this._events)
-    this._events = {};
+var MIN_DURATION = 1;
 
-  // If there is no 'error' event listener then throw.
-  if (type === 'error') {
-    if (!this._events.error ||
-        (isObject(this._events.error) && !this._events.error.length)) {
-      er = arguments[1];
-      if (er instanceof Error) {
-        throw er; // Unhandled 'error' event
-      } else {
-        // At least give some kind of context to the user
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-        err.context = er;
-        throw err;
+function Timer(cfg) {
+  this.init(cfg);
+}
+
+Timer.prototype = {
+  init: function init(cfg) {
+    this.cfg = assign({
+      easing: 'linear',
+      duration: Infinity,
+      onStart: noop,
+      onRun: noop,
+      onStop: noop,
+      onEnd: noop
+    }, cfg);
+  },
+  run: function run() {
+    var _cfg = this.cfg,
+        duration = _cfg.duration,
+        onStart = _cfg.onStart,
+        onRun = _cfg.onRun;
+
+    if (duration <= MIN_DURATION) {
+      this.isfinished = true;
+      typeof onRun === 'function' ? onRun({ percent: 1 }) : null;
+      this.stop();
+    }
+    if (this.isfinished) return;
+    this._hasFinishedPercent = this._stop && this._stop.percent || 0;
+    this._stop = null;
+    this.start = Date.now();
+    this.percent = 0;
+    typeof onStart === 'function' ? onStart({ percent: 0, type: TYPES.START }) : null;
+    // epsilon determines the precision of the solved values
+    var epsilon = 1000 / 60 / duration / 4;
+    var b = this.cfg.bezierArgs;
+    this.easingFn = b && b.length === 4 ? bezier(b[0], b[1], b[2], b[3], epsilon) : easing[this.cfg.easing];
+    this._run();
+  },
+
+  _run: function _run() {
+    var _this = this;
+
+    var _cfg2 = this.cfg,
+        onRun = _cfg2.onRun,
+        onStop = _cfg2.onStop;
+
+    cancelRAF(this._raf);
+    this._raf = raf(function () {
+      _this.now = Date.now();
+      _this.t = _this.now - _this.start;
+      _this.duration = _this.now - _this.start >= _this.cfg.duration ? _this.cfg.duration : _this.now - _this.start;
+      _this.progress = _this.easingFn(_this.duration / _this.cfg.duration);
+      _this.percent = _this.duration / _this.cfg.duration + _this._hasFinishedPercent;
+      if (_this.percent >= 1 || _this._stop) {
+        _this.percent = _this._stop && _this._stop.percent ? _this._stop.percent : 1;
+        _this.duration = _this._stop && _this._stop.duration ? _this._stop.duration : _this.duration;
+
+        typeof onRun === 'function' ? onRun({
+          percent: _this.progress,
+          originPercent: _this.percent,
+          t: _this.t,
+          type: TYPES.RUN
+        }) : null;
+
+        typeof onStop === 'function' ? onStop({
+          percent: _this.percent,
+          t: _this.t,
+          type: TYPES.STOP
+        }) : null;
+
+        if (_this.percent >= 1) {
+          _this.isfinished = true;
+          _this.stop();
+        }
+        return;
       }
-    }
+
+      typeof onRun === 'function' ? onRun({
+        percent: _this.progress,
+        originPercent: _this.percent,
+        t: _this.t,
+        type: TYPES.RUN
+      }) : null;
+
+      _this._run();
+    });
+  },
+
+  stop: function stop() {
+    var onEnd = this.cfg.onEnd;
+
+    this._stop = {
+      percent: this.percent,
+      now: this.now
+    };
+    typeof onEnd === 'function' ? onEnd({
+      percent: 1,
+      t: this.t,
+      type: TYPES.END
+    }) : null;
+    cancelRAF(this._raf);
   }
-
-  handler = this._events[type];
-
-  if (isUndefined(handler))
-    return false;
-
-  if (isFunction(handler)) {
-    switch (arguments.length) {
-      // fast cases
-      case 1:
-        handler.call(this);
-        break;
-      case 2:
-        handler.call(this, arguments[1]);
-        break;
-      case 3:
-        handler.call(this, arguments[1], arguments[2]);
-        break;
-      // slower
-      default:
-        args = Array.prototype.slice.call(arguments, 1);
-        handler.apply(this, args);
-    }
-  } else if (isObject(handler)) {
-    args = Array.prototype.slice.call(arguments, 1);
-    listeners = handler.slice();
-    len = listeners.length;
-    for (i = 0; i < len; i++)
-      listeners[i].apply(this, args);
-  }
-
-  return true;
 };
 
-EventEmitter.prototype.addListener = function(type, listener) {
-  var m;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events)
-    this._events = {};
-
-  // To avoid recursion in the case that type === "newListener"! Before
-  // adding it to the listeners, first emit "newListener".
-  if (this._events.newListener)
-    this.emit('newListener', type,
-              isFunction(listener.listener) ?
-              listener.listener : listener);
-
-  if (!this._events[type])
-    // Optimize the case of one listener. Don't need the extra array object.
-    this._events[type] = listener;
-  else if (isObject(this._events[type]))
-    // If we've already got an array, just append.
-    this._events[type].push(listener);
-  else
-    // Adding the second element, need to change to array.
-    this._events[type] = [this._events[type], listener];
-
-  // Check for listener leak
-  if (isObject(this._events[type]) && !this._events[type].warned) {
-    if (!isUndefined(this._maxListeners)) {
-      m = this._maxListeners;
-    } else {
-      m = EventEmitter.defaultMaxListeners;
-    }
-
-    if (m && m > 0 && this._events[type].length > m) {
-      this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
-      if (typeof console.trace === 'function') {
-        // not supported in IE 10
-        console.trace();
-      }
-    }
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.on = EventEmitter.prototype.addListener;
-
-EventEmitter.prototype.once = function(type, listener) {
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  var fired = false;
-
-  function g() {
-    this.removeListener(type, g);
-
-    if (!fired) {
-      fired = true;
-      listener.apply(this, arguments);
-    }
-  }
-
-  g.listener = listener;
-  this.on(type, g);
-
-  return this;
-};
-
-// emits a 'removeListener' event iff the listener was removed
-EventEmitter.prototype.removeListener = function(type, listener) {
-  var list, position, length, i;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events || !this._events[type])
-    return this;
-
-  list = this._events[type];
-  length = list.length;
-  position = -1;
-
-  if (list === listener ||
-      (isFunction(list.listener) && list.listener === listener)) {
-    delete this._events[type];
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-
-  } else if (isObject(list)) {
-    for (i = length; i-- > 0;) {
-      if (list[i] === listener ||
-          (list[i].listener && list[i].listener === listener)) {
-        position = i;
-        break;
-      }
-    }
-
-    if (position < 0)
-      return this;
-
-    if (list.length === 1) {
-      list.length = 0;
-      delete this._events[type];
-    } else {
-      list.splice(position, 1);
-    }
-
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  var key, listeners;
-
-  if (!this._events)
-    return this;
-
-  // not listening for removeListener, no need to emit
-  if (!this._events.removeListener) {
-    if (arguments.length === 0)
-      this._events = {};
-    else if (this._events[type])
-      delete this._events[type];
-    return this;
-  }
-
-  // emit removeListener for all listeners on all events
-  if (arguments.length === 0) {
-    for (key in this._events) {
-      if (key === 'removeListener') continue;
-      this.removeAllListeners(key);
-    }
-    this.removeAllListeners('removeListener');
-    this._events = {};
-    return this;
-  }
-
-  listeners = this._events[type];
-
-  if (isFunction(listeners)) {
-    this.removeListener(type, listeners);
-  } else if (listeners) {
-    // LIFO order
-    while (listeners.length)
-      this.removeListener(type, listeners[listeners.length - 1]);
-  }
-  delete this._events[type];
-
-  return this;
-};
-
-EventEmitter.prototype.listeners = function(type) {
-  var ret;
-  if (!this._events || !this._events[type])
-    ret = [];
-  else if (isFunction(this._events[type]))
-    ret = [this._events[type]];
-  else
-    ret = this._events[type].slice();
-  return ret;
-};
-
-EventEmitter.prototype.listenerCount = function(type) {
-  if (this._events) {
-    var evlistener = this._events[type];
-
-    if (isFunction(evlistener))
-      return 1;
-    else if (evlistener)
-      return evlistener.length;
-  }
-  return 0;
-};
-
-EventEmitter.listenerCount = function(emitter, type) {
-  return emitter.listenerCount(type);
-};
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-
+module.exports = Timer;
 
 /***/ }),
 /* 3 */
@@ -727,17 +435,16 @@ exports.default = Bezier;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 var raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback) {
   window.setTimeout(callback, 1000 / 60);
 };
 
 var cancelRAF = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame || window.clearTimeout;
 
-exports.raf = raf;
-exports.cancelRAF = cancelRAF;
+module.exports = {
+  raf: raf,
+  cancelRAF: cancelRAF
+};
 
 /***/ }),
 /* 6 */
