@@ -21,13 +21,18 @@ var Timer = require('animation-util');
 
 var block = document.querySelector('#block');
 
-var timer = new Timer({
-  duration:1000,
-  easing:'easeInOutBounce'
-});
-
-timer.on('run',(e)=>{
-  block.style.transform = 'translateX('+e.percent * 100 + 'px)';
+let timer = new Timer({
+  duration: 500,
+  easing: 'easeOutSine',
+  onStart:(e)=>{
+    console.log(e);
+  },
+  onRun: (e) => {
+    block.style.webkitTransform = `translateX(${e.percent * 200}px)`;
+  },
+  onEnd: (e)=>{
+    console.log(e)
+  }
 });
 
 timer.run();
@@ -54,14 +59,8 @@ timer.run();
 |:---------------|:--------|:----|:----------|
 |run|/|/|开始动画|
 |stop|/|/|停止动画|
-
-
-### 事件
-
-|名称|参数|描述|
-|:---------------|:--------|:----------|
-|start|/|开始动画|
-|run|/|正在动画|
-|stop|/|正在中断|
-|end|/|结束动画|
+|onStart|/|开始动画|
+|onRun|/|正在动画|
+|onStop|/|正在中断|
+|onEnd|/|结束动画|
 

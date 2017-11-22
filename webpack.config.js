@@ -6,7 +6,7 @@ module.exports = {
   plugins: [],
   //页面入口文件配置
   entry: {
-    index: './index.js'
+    index: './demo/index.js'
   },
   //入口文件输出配置
   output: {

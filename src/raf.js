@@ -17,7 +17,7 @@ const cancelRAF = window.cancelAnimationFrame ||
   window.clearTimeout;
 
 
-export {
+module.exports = {
   raf,
   cancelRAF
 };

@@ -734,14 +734,7 @@ var raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || 
   window.setTimeout(callback, 1000 / 60);
 };
 
-var vendors = ['webkit', 'moz', 'ms', 'o'];
-var cancelRAF = window.cancelAnimationFrame;
-for (var i = 0; i < vendors.length; i++) {
-  if (window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame']) {
-    exports.cancelRAF = cancelRAF = window[vendors[i] + 'CancelAnimationFrame'] || window[vendors[i] + 'CancelRequestAnimationFrame'];
-  }
-}
-exports.cancelRAF = cancelRAF = cancelRAF || window.clearTimeout;
+var cancelRAF = window.cancelAnimationFrame || window.webkitCancelAnimationFrame || window.mozCancelAnimationFrame || window.oCancelAnimationFrame || window.msCancelAnimationFrame || window.clearTimeout;
 
 exports.raf = raf;
 exports.cancelRAF = cancelRAF;
