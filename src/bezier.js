@@ -51,4 +51,4 @@ function Bezier(x1, y1, x2, y2, epsilon) {
 
 };
 
-export default Bezier;
+module.exports = Bezier;

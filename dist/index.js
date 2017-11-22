@@ -370,9 +370,6 @@ module.exports = Easing;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 function Bezier(x1, y1, x2, y2, epsilon) {
   var curveX = function curveX(t) {
     var v = 1 - t;
@@ -426,7 +423,7 @@ function Bezier(x1, y1, x2, y2, epsilon) {
   };
 };
 
-exports.default = Bezier;
+module.exports = Bezier;
 
 /***/ }),
 /* 5 */
