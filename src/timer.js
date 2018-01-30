@@ -112,9 +112,8 @@ Timer.prototype = {
   }
 };
 
-// module.exports = Timer;
+module.exports = Timer;
 
-export default Timer;
 
 
 
