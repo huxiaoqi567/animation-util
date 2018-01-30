@@ -6,11 +6,11 @@ module.exports = {
   plugins: [],
   //页面入口文件配置
   entry: {
-    index: './demo/index.js'
+    index: './index.js'
   },
   //入口文件输出配置
   output: {
-    path: __dirname + '/dist/',
+    path: __dirname + '/lib/',
     filename: '[name].js'
   },
   devServer: {
