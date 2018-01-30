@@ -1,22 +1,22 @@
 'use strict';
 
-const easing = require('./easing');
-const bezier = require('./bezier');
-const {raf, cancelRAF} = require('./raf');
-const assign = require('object-assign');
+var easing = require('./easing');
+var bezier = require('./bezier');
+var {raf, cancelRAF} = require('./raf');
+var assign = require('object-assign');
 
 
-const TYPES = {
+var TYPES = {
   START: 'start',
   END: 'end',
   RUN: 'run',
   STOP: 'stop'
 };
 
-const noop = () => {
+var noop = () => {
 };
 
-const MIN_DURATION = 1;
+var MIN_DURATION = 1;
 
 function Timer(cfg) {
   this.init(cfg);
@@ -112,7 +112,9 @@ Timer.prototype = {
   }
 };
 
-module.exports = Timer;
+// module.exports = Timer;
+
+export default Timer;
 
 
 

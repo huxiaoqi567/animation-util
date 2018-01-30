@@ -6,12 +6,13 @@ module.exports = {
   plugins: [],
   //页面入口文件配置
   entry: {
-    index: './index.js'
+    index: './src/index.js'
   },
   //入口文件输出配置
   output: {
     path: __dirname + '/lib/',
-    filename: '[name].js'
+    filename: '[name].js',
+    libraryTarget:'umd'
   },
   devServer: {
     contentBase: "./demo",  //以public为根目录提供文件

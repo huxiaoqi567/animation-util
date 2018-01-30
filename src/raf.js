@@ -1,6 +1,6 @@
 'use strict';
 
-const raf = window.requestAnimationFrame ||
+var  raf = window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   window.oRequestAnimationFrame ||
@@ -9,7 +9,7 @@ const raf = window.requestAnimationFrame ||
     window.setTimeout(callback, 1000 / 60);
   };
 
-const cancelRAF = window.cancelAnimationFrame ||
+var  cancelRAF = window.cancelAnimationFrame ||
   window.webkitCancelAnimationFrame ||
   window.mozCancelAnimationFrame ||
   window.oCancelAnimationFrame ||

@@ -1,11 +1,11 @@
 'use strict';
 
-const {PI, sin, cos, sqrt, pow} = Math;
-const c1 = 1.70158;
-const c2 = c1 * 1.525;
-const c3 = c1 + 1;
-const c4 = ( 2 * PI ) / 3;
-const c5 = ( 2 * PI ) / 4.5;
+var  {PI, sin, cos, sqrt, pow} = Math;
+var  c1 = 1.70158;
+var  c2 = c1 * 1.525;
+var  c3 = c1 + 1;
+var  c4 = ( 2 * PI ) / 3;
+var  c5 = ( 2 * PI ) / 4.5;
 
 // x is the fraction of animation progress, in the range 0..1
 function bounceOut(x) {
@@ -23,7 +23,7 @@ function bounceOut(x) {
 }
 
 
-const Easing = {
+var  Easing = {
   linear: function(x) {
     return x;
   },
