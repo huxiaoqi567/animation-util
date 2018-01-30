@@ -4,6 +4,8 @@
   "description": "util for animation",
   "main": "lib/index.js",
   "scripts": {
+    "start":"webpack-dev-server --config webpack.dev.config.js",
+    "build":"webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
