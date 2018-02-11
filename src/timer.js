@@ -112,6 +112,10 @@ Timer.prototype = {
   }
 };
 
+Timer.Easing = easing;
+Timer.Bezier = bezier;
+Timer.raf = raf;
+Timer.cancelRAF = cancelRAF;
 module.exports = Timer;
 
 

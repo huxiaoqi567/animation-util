@@ -1,6 +1,6 @@
 {
   "name": "animation-util",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "util for animation",
   "main": "lib/index.js",
   "scripts": {
