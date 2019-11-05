@@ -1,7 +1,7 @@
 'use strict';
 
 var easing = require('./easing');
-var bezier = require('./bezier');
+var Bezier = require('./bezier');
 var {raf, cancelRAF} = require('./raf');
 var assign = require('object-assign');
 
@@ -49,7 +49,17 @@ Timer.prototype = {
     // epsilon determines the precision of the solved values
     let epsilon = (1000 / 60 / duration) / 4;
     let b = this.cfg.bezierArgs;
-    this.easingFn = b && b.length === 4 ? bezier(b[0], b[1], b[2], b[3], epsilon) : easing[this.cfg.easing];
+
+    if (b && b.length === 4) {
+      this.bezier = this.bezier || new Bezier(b[0], b[1], b[2], b[3]);
+      this.easingFn = function(x) {
+        return this.bezier.solve(x, epsilon);
+      };
+    } else {
+      this.easingFn = easing[this.cfg.easing];
+    }
+
+    // this.easingFn = b && b.length === 4 ? this.bezier.solve(epsilon) : easing[this.cfg.easing];
     this._run();
   },
 
@@ -113,7 +123,7 @@ Timer.prototype = {
 };
 
 Timer.Easing = easing;
-Timer.Bezier = bezier;
+Timer.Bezier = Bezier;
 Timer.raf = raf;
 Timer.cancelRAF = cancelRAF;
 module.exports = Timer;
